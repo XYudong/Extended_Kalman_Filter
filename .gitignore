@@ -5,6 +5,9 @@ cmake-build-debug/
 .vscode/
 .idea/
 
+# simulator
+term2_sim_linux/
+
 # Xcode
 *.pbxuser
 !default.pbxuser
