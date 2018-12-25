@@ -47,16 +47,16 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
    * update the state by using Extended Kalman Filter equations
    */
-  // Mapping function
+  // Mapping function from Cartesian coordinates to Polar coordinates
   Eigen::Vector3d h;
-  h[0] = sqrt(z[0] * z[0] + z[1] * z[1]);
-  h[1] = atan2(z[1], z[0]);
-  h[2] = (z[0] * z[2] + z[1] * z[3]) / h[0];
+  h[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
+  h[1] = atan2(x_[1], x_[0]);
+  h[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / h[0];
 
   Eigen::Vector3d y = z - h;
   MatrixXd S = H_ * P_ * H_.transpose() + R_;
   MatrixXd K = P_ * H_.transpose() * S.inverse();
-  MatrixXd I = MatrixXd::Identity(3, 3);
+  MatrixXd I = MatrixXd::Identity(4, 4);
 
   x_ = x_ + K * y;
   P_ = (I - K * H_) * P_;

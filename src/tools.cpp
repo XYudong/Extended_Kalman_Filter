@@ -19,12 +19,15 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
   for(auto it_est = estimations.begin(), it_gt = ground_truth.begin(); it_est < estimations.end()
       && it_gt < ground_truth.end(); it_est++, it_gt++) {
     VectorXd err = *it_est - *it_gt;
-    err.array().pow(2);
-//    std::cout << err << std::endl;
-//    std::cout << mean_sq_err << std::endl;
+    std::cout << "err:\n" << err << std::endl;
+    err = err.array().pow(2);
+    std::cout << "sq err:\n" << err << '\n' << std::endl;
+
     mean_sq_err += err;
   }
+//  std::cout << mean_sq_err << '\n' << std::endl;
   mean_sq_err.array() / estimations.size();
+  std::cout << mean_sq_err << std::endl;
 
   return mean_sq_err.cwiseSqrt();
 }
