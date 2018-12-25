@@ -11,7 +11,8 @@ class KalmanFilter {
   KalmanFilter();
 
   /**
-   * Destructor
+   * virtual Destructor
+   * in order to delete objects of derived class properly
    */
   virtual ~KalmanFilter();
 
