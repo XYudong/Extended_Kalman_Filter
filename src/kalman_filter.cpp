@@ -3,9 +3,10 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-/* 
- * Please note that the Eigen library does not initialize 
+/**
+ * Please note that the Eigen library does not gauantee to initialize
  *   VectorXd or MatrixXd objects with zeros upon creation.
+ * It may be initialized with zeros but !!may not!!, which will cause huge error!
  */
 
 KalmanFilter::KalmanFilter() {}
@@ -46,11 +47,12 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   // Mapping function from Cartesian coordinates to Polar coordinates
   Eigen::Vector3d h_x;
   h_x[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
-  h_x[1] = atan2(x_[1], x_[0]);
+  h_x[1] = atan2(x_[1], x_[0]);         // [-pi, pi]
   h_x[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / h_x[0];
 
   Eigen::Vector3d y = z - h_x;
-  y[1] = fmod(y[1] - M_PI, 2*M_PI) + M_PI;
+  // wrap up phi to [-pi, pi]
+  y[1] = fmod(y[1] - M_PI, 2 * M_PI) + M_PI;
   UpdateWithY(y);
 }
 

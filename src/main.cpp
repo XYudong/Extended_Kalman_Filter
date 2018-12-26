@@ -108,7 +108,6 @@ int main() {
           fusionEKF.ProcessMeasurement(meas_package);
 
           // Push the current estimated x,y position from the Kalman filter's state vector
-
           VectorXd estimate(4);
 
           double p_x = fusionEKF.ekf_.x_(0);
@@ -169,18 +168,3 @@ int main() {
 
   h.run();
 }
-
-
-//int main(){
-////  Eigen::MatrixXd m = MatrixXd::Identity(3, 4);
-//  MatrixXd m(3,3);
-//  Eigen::Matrix3d n = Eigen::MatrixXd::Constant(3, 3, 1);
-//  Eigen::VectorXd v;
-//  v = Eigen::Vector3d(1, 2, 3);
-//  std::cout << v << "\n" << std::endl;
-//  v << -1, -2, 3;
-//  std::cout << v << "\n" << std::endl;
-//  std::cout << v.array() * v.array() << std::endl;
-////  std::cout << v.array().pow(2) << '\n' << std::endl;
-////  std::cout << v << std::endl;
-//}

@@ -13,32 +13,22 @@ Tools::~Tools() {}
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
   /**
-   * Calculate the RMSE here.
+   * Calculate the Root Mean Square Error(RMSE) here.
    */
   VectorXd mean_sq_err(4);
   mean_sq_err << 0, 0, 0, 0;
-//  std::cout << "initial total sq err:" << mean_sq_err << std::endl;
+
   for(auto it_est = estimations.begin(), it_gt = ground_truth.begin(); it_est != estimations.end()
       && it_gt != ground_truth.end(); it_est++, it_gt++) {
     VectorXd err = *it_est - *it_gt;
 
     for(int i = 0; i < err.size(); i++) {
-      err[i] = fabs(err[i]) > 0.0001 ? err[i] : 0.0001;
+      err[i] = fabs(err[i]) > 0.00001 ? err[i] : 0.00001;
     }
-//    std::cout << "err:\n" << err << std::endl;
     err = err.array() * err.array();
-//    std::cout << "sq err:\n" << err << '\n' << std::endl;
-//    for(int i = 0; i < err.size(); i++) {
-//      if(err[i] < 0 || err[i] > 10000) {
-//        std::cout << "Invalid sq err:" << std::endl;
-//        std::cout << err << std::endl;
-//      }
-//    }
 
     mean_sq_err += err;
-//    std::cout << "subtotal sq err:\n" << mean_sq_err << '\n' << std::endl;
   }
-  std::cout << "total sq err:\n" << mean_sq_err << '\n' << std::endl;
   mean_sq_err = mean_sq_err.array() / estimations.size();
   std::cout << "MSE:\n" << mean_sq_err << std::endl;
 
@@ -48,6 +38,7 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   /**
    * Calculate a Jacobian here.
+   * i.e. first-order derivatives
    */
 
   MatrixXd H_j(3, 4);
@@ -58,10 +49,10 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
   double xy_sq = px * px + py * py;
   // a threshold to avoid division by 0
-  double EPSILON = 0.0001;
+  double EPSILON = 0.00001;
   if (xy_sq < EPSILON) {
    return H_j;
-   // i.e. when x,y are too small, just keep H_j as all zeros which makes sense.
+   // i.e. when x,y are too small, just keep H_j as all zeros, which makes sense.
   }
 
   double xy_sqrt = sqrt(xy_sq);
