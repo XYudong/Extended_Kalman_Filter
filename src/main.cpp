@@ -149,21 +149,6 @@ int main() {
 
   }); // end h.onMessage
 
-//  // We don't need this since we're not using HTTP but if it's removed the program
-//  // doesn't compile :-(
-//  h.onHttpRequest([](uWS::HttpResponse *res, uWS::HttpRequest req, char *data, size_t, size_t) {
-//    const std::string s = "<h1>Hello world!</h1>";
-//    if (req.getUrl().valueLength == 1)
-//    {
-//      res->end(s.data(), s.length());
-//    }
-//    else
-//    {
-//      // i guess this should be done more gracefully?
-//      res->end(nullptr, 0);
-//    }
-//  });
-
   h.onConnection([&h](uWS::WebSocket<uWS::SERVER> ws, uWS::HttpRequest req) {
     std::cout << "Connected!!!" << std::endl;
   });
@@ -190,9 +175,12 @@ int main() {
 ////  Eigen::MatrixXd m = MatrixXd::Identity(3, 4);
 //  MatrixXd m(3,3);
 //  Eigen::Matrix3d n = Eigen::MatrixXd::Constant(3, 3, 1);
-//  Eigen::VectorXd v(3);
-//  v << 1, 2, 3;
-//  std::cout << v << std::endl;
-//  std::cout << v.array().pow(2) << '\n' << std::endl;
-//  std::cout << v << std::endl;
+//  Eigen::VectorXd v;
+//  v = Eigen::Vector3d(1, 2, 3);
+//  std::cout << v << "\n" << std::endl;
+//  v << -1, -2, 3;
+//  std::cout << v << "\n" << std::endl;
+//  std::cout << v.array() * v.array() << std::endl;
+////  std::cout << v.array().pow(2) << '\n' << std::endl;
+////  std::cout << v << std::endl;
 //}

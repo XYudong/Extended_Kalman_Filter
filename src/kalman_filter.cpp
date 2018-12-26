@@ -35,12 +35,8 @@ void KalmanFilter::Update(const VectorXd &z) {
    * update the state by using Kalman Filter equations
    */
   Eigen::Vector2d y = z - H_ * x_;
-  MatrixXd S = H_ * P_ * H_.transpose() + R_;
-  MatrixXd K = P_ * H_.transpose() * S.inverse();
-  MatrixXd I = MatrixXd::Identity(4, 4);
 
-  x_ = x_ + K * y;
-  P_ = (I - K * H_) * P_;
+  UpdateWithY(y);
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -48,15 +44,20 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
    * update the state by using Extended Kalman Filter equations
    */
   // Mapping function from Cartesian coordinates to Polar coordinates
-  Eigen::Vector3d h;
-  h[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
-  h[1] = atan2(x_[1], x_[0]);
-  h[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / h[0];
+  Eigen::Vector3d h_x;
+  h_x[0] = sqrt(x_[0] * x_[0] + x_[1] * x_[1]);
+  h_x[1] = atan2(x_[1], x_[0]);
+  h_x[2] = (x_[0] * x_[2] + x_[1] * x_[3]) / h_x[0];
 
-  Eigen::Vector3d y = z - h;
+  Eigen::Vector3d y = z - h_x;
+  y[1] = fmod(y[1] - M_PI, 2*M_PI) + M_PI;
+  UpdateWithY(y);
+}
+
+void KalmanFilter::UpdateWithY(const Eigen::VectorXd &y) {
   MatrixXd S = H_ * P_ * H_.transpose() + R_;
   MatrixXd K = P_ * H_.transpose() * S.inverse();
-  MatrixXd I = MatrixXd::Identity(4, 4);
+  MatrixXd I = MatrixXd::Identity(x_.size(), x_.size());
 
   x_ = x_ + K * y;
   P_ = (I - K * H_) * P_;
