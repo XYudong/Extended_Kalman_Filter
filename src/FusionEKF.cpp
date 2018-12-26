@@ -74,7 +74,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                0, 0, 0, 1000;
 
     if (measurement_pack.sensor_type_ == SensorType::RADAR) {
-      // Convert radar from polar to cartesian coordinates and initialize state.
+      // Convert radar measurement from Polar to Cartesian coordinates and initialize state.
       auto rho = measurement_pack.raw_measurements_[0];
       auto phi = measurement_pack.raw_measurements_[1];     // bearing angle
       auto rho_dot = measurement_pack.raw_measurements_[2];
